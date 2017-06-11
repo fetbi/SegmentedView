@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SegmentedView.Demo"
+			 xmlns:controls="clr-namespace:Xamarin.Plugins.SegmentedView;assembly=Xamarin.Plugins.SegmentedView"
+             x:Class="SegmentedView.Demo.MainPage">
+	<ContentPage.Content>
+		<StackLayout HeightRequest="30" Padding="20">
+			<controls:SegmentedView>
+				<controls:SegmentedView.Children>
+					<controls:SegmentedViewOption Text="One" />
+					<controls:SegmentedViewOption Text="Two" />
+					<controls:SegmentedViewOption Text="Three" />
+				</controls:SegmentedView.Children>
+			</controls:SegmentedView>
+		</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

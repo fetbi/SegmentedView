@@ -1,27 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Xamarin.Forms;
 
-namespace SegmentedView
+namespace Xamarin.Plugins.SegmentedView
 {
-	public class SegmentedView : ContentPage
+	public class SegmentedView : View, IViewContainer<SegmentedViewOption>
 	{
+		public IList<SegmentedViewOption> Children { get; set; }
+
 		public SegmentedView()
 		{
-			var button = new Button
+			Children = new List<SegmentedViewOption>();
+		}
+
+		public event ValueChangedEventHandler ValueChanged;
+
+		public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+
+		private string selectedValue;
+
+		public string SelectedValue
+		{
+			get { return selectedValue; }
+			set
 			{
-				Text = "Click Me!",
-				VerticalOptions = LayoutOptions.CenterAndExpand,
-				HorizontalOptions = LayoutOptions.CenterAndExpand,
-			};
+				selectedValue = value;
+				if (ValueChanged != null)
+					ValueChanged(this, EventArgs.Empty);
+			}
+		}
+	}
 
-			int clicked = 0;
-			button.Clicked += (s, e) => button.Text = "Clicked: " + clicked++;
+	public class SegmentedViewOption : View
+	{
+		public static readonly BindableProperty TextProperty = BindableProperty.Create<SegmentedViewOption, string>(p => p.Text, "");
 
-			Content = button;
+		public string Text
+		{
+			get { return (string)GetValue(TextProperty); }
+			set { SetValue(TextProperty, value); }
+		}
+
+		public SegmentedViewOption()
+		{
 		}
 	}
 }
