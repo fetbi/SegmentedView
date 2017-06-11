@@ -4,6 +4,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Plugins.Droid.SegmentedView.Implementation;
@@ -15,6 +17,9 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 {
 	public class SegmentedViewRenderer : ViewRenderer<Xamarin.Plugins.SegmentedView.SegmentedView, RadioGroup>
 	{
+		private LayoutInflater _layoutInflater;
+		private RadioGroup _mainControl;
+
 		public SegmentedViewRenderer()
 		{
 		}
@@ -23,11 +28,11 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 		{
 			base.OnElementChanged(e);
 
-			var layoutInflater = (LayoutInflater)Context.GetSystemService(Context.LayoutInflaterService);
+			_layoutInflater = (LayoutInflater)Context.GetSystemService(Context.LayoutInflaterService);
 
-			var g = new RadioGroup(Context);
-			g.Orientation = Orientation.Horizontal;
-			g.CheckedChange += (sender, eventArgs) =>
+			_mainControl = new RadioGroup(Context);
+			_mainControl.Orientation = Orientation.Horizontal;
+			_mainControl.CheckedChange += (sender, eventArgs) =>
 			{
 				var rg = (RadioGroup)sender;
 				if (rg.CheckedRadioButtonId != -1)
@@ -44,18 +49,67 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 			for (var i = 0; i < e.NewElement.Children.Count; i++)
 			{
 				var o = e.NewElement.Children[i];
-				var v = (SegmentedViewButton)layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
+				var v = (SegmentedViewButton)_layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
 				v.Text = o.Text;
 				if (i == 0)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_first_background);
 				else if (i == e.NewElement.Children.Count - 1)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
-				g.AddView(v);
+				_mainControl.AddView(v);
 			}
 
-			SetNativeControl(g);
+			SetNativeControl(_mainControl);
+
+			if (e.OldElement != null)
+			{
+				// Unsubscribe from event handlers and cleanup any resources
+
+				if (Element != null)
+				{
+					if (Element.Children != null && Element.Children is INotifyCollectionChanged)
+						((INotifyCollectionChanged)Element.Children).CollectionChanged -= ItemsSource_CollectionChanged;
+				}
+			}
+
+			if (e.NewElement != null)
+			{
+				// Configure the control and subscribe to event handlers
+				if (e.NewElement.Children != null && e.NewElement.Children is ObservableCollection< SegmentedViewOption>)
+					((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
+			}
 		}
 
+		private void RebuildView()
+		{
+			_mainControl.RemoveAllViews();
+			for (var i = 0; i < Element.Children.Count; i++)
+			{
+				var o = Element.Children[i];
+				var v = (SegmentedViewButton)_layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
+				v.Text = o.Text;
+				if (i == 0)
+					v.SetBackgroundResource(Resource.Drawable.segmented_control_first_background);
+				else if (i == Element.Children.Count - 1)
+					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
+				_mainControl.AddView(v);
+			}
+		}
+
+		async void ItemsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			switch(e.Action)
+			{
+				case NotifyCollectionChangedAction.Add:
+				case NotifyCollectionChangedAction.Move:
+				case NotifyCollectionChangedAction.Remove:
+					RebuildView();
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					_mainControl.RemoveAllViews();
+					break;
+			}
+
+		}
 		/// <summary>
 		/// Used for registration with dependency service
 		/// </summary>

@@ -1,16 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace Xamarin.Plugins.SegmentedView
 {
 	public class SegmentedView : View, IViewContainer<SegmentedViewOption>
 	{
-		public IList<SegmentedViewOption> Children { get; set; }
+
+		public static readonly BindableProperty ChildrenProperty = BindableProperty.Create("Children", typeof(IList), typeof(SegmentedView), null);
+
+		public IList<SegmentedViewOption> Children
+		{
+			get { return (IList<SegmentedViewOption>)GetValue(ChildrenProperty); }
+			set { SetValue(ChildrenProperty, value); }
+		}
+
 
 		public SegmentedView()
 		{
-			Children = new List<SegmentedViewOption>();
+			Children = new ObservableCollection<SegmentedViewOption>();
 		}
 
 		public event ValueChangedEventHandler ValueChanged;
@@ -33,8 +43,7 @@ namespace Xamarin.Plugins.SegmentedView
 
 	public class SegmentedViewOption : View
 	{
-		public static readonly BindableProperty TextProperty = BindableProperty.Create<SegmentedViewOption, string>(p => p.Text, "");
-
+		public static readonly BindableProperty TextProperty = BindableProperty.Create("Text", typeof(string), typeof(SegmentedViewOption), string.Empty);
 		public string Text
 		{
 			get { return (string)GetValue(TextProperty); }

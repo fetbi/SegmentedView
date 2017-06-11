@@ -6,7 +6,7 @@
              x:Class="SegmentedView.Demo.MainPage">
 	<ContentPage.Content>
 		<StackLayout HeightRequest="30" Padding="20">
-			<controls:SegmentedView>
+			<controls:SegmentedView x:Name="RosterTypePicker">
 				<controls:SegmentedView.Children>
 					<controls:SegmentedViewOption Text="One" />
 					<controls:SegmentedViewOption Text="Two" />
