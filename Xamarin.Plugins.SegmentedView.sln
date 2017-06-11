@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Plugins.SegmentedView", "Xamarin.Plugins.SegmentedView.csproj", "{67F9D3A8-F71E-4428-913F-C37AE82CDB24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Plugins.SegmentedView", "Xamarin.Plugins.SegmentedView\Xamarin.Plugins.SegmentedView.csproj", "{67F9D3A8-F71E-4428-913F-C37AE82CDB24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Plugins.SegmentedView.Droid", "..\Xamarin.Plugins.Droid.SegmentedView\Xamarin.Plugins.SegmentedView.Droid.csproj", "{175AD22A-B16E-4DC6-B724-1C35BD1D8F68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Plugins.SegmentedView.Droid", "Xamarin.Plugins.Droid.SegmentedView\Xamarin.Plugins.SegmentedView.Droid.csproj", "{175AD22A-B16E-4DC6-B724-1C35BD1D8F68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.Plugins.SegmentedView.iOS", "Xamarin.Plugins.iOS.SegmentedView\Xamarin.Plugins.SegmentedView.iOS.csproj", "{E5862D62-8E62-4BAD-B2B2-78B73CE33889}"
 EndProject
