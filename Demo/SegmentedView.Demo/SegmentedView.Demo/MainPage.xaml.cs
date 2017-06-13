@@ -13,8 +13,13 @@ namespace SegmentedView.Demo
 			RosterTypePicker.Children.Add(new SegmentedViewOption { Text = "New" });
 			RosterTypePicker.Children.Add(new SegmentedViewOption { Text = "TEST" });
 			RosterTypePicker.Children.Add(new SegmentedViewOption { Text = "Awesome" });
-			RosterTypePicker.SelectedValue = RosterTypePicker.Children[0].Text;
+			RosterTypePicker.ValueChanged += RosterTypePicker_ValueChanged;
 
+		}
+
+		private void RosterTypePicker_ValueChanged(object sender, System.EventArgs e)
+		{
+			var a = "abc";
 		}
 	}
 }

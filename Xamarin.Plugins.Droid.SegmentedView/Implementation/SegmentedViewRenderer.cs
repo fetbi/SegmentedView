@@ -6,6 +6,7 @@ using Android.Widget;
 using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Plugins.Droid.SegmentedView.Implementation;
@@ -31,20 +32,9 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 			_layoutInflater = (LayoutInflater)Context.GetSystemService(Context.LayoutInflaterService);
 
 			_mainControl = new RadioGroup(Context);
+			//_mainControl.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
 			_mainControl.Orientation = Orientation.Horizontal;
-			_mainControl.CheckedChange += (sender, eventArgs) =>
-			{
-				var rg = (RadioGroup)sender;
-				if (rg.CheckedRadioButtonId != -1)
-				{
-					var id = rg.CheckedRadioButtonId;
-					var radioButton = rg.FindViewById(id);
-					var radioId = rg.IndexOfChild(radioButton);
-					var btn = (RadioButton)rg.GetChildAt(radioId);
-					var selection = (String)btn.Text;
-					e.NewElement.SelectedValue = selection;
-				}
-			};
+			_mainControl.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
 
 			for (var i = 0; i < e.NewElement.Children.Count; i++)
 			{
@@ -52,11 +42,43 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 				var v = (SegmentedViewButton)_layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
 				v.Text = o.Text;
 				if (i == 0)
+				{
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_first_background);
+				}
 				else if (i == e.NewElement.Children.Count - 1)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
+
+				v.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
 				_mainControl.AddView(v);
 			}
+
+			_mainControl.CheckedChange += (sender, eventArgs) =>
+			{
+				var rg = (RadioGroup)sender;
+
+				if (rg.CheckedRadioButtonId != -1)
+				{
+					var id = rg.CheckedRadioButtonId;
+					var radioButton = rg.FindViewById(id);
+					var radioId = rg.IndexOfChild(radioButton);
+					var btn = (RadioButton)rg.GetChildAt(radioId);
+					if (btn != null)
+					{
+						var selection = (String)btn.Text;
+						e.NewElement.SelectedValue = selection;
+					}
+				}
+			};
+
+			if (e.NewElement.Children.Count > 0)
+			{
+				var firstRadio =_mainControl.GetChildAt(0);
+				if(firstRadio != null)
+				{
+					_mainControl.Check(firstRadio.Id);
+				}
+			}
+
 
 			SetNativeControl(_mainControl);
 
@@ -78,20 +100,47 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 					((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
 			}
 		}
-
+		//protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		//{
+		//	base.OnElementPropertyChanged(sender, e);
+		//	if (e.PropertyName == Xamarin.Plugins.SegmentedView.SegmentedView.SelectedValue)
+		//	{
+		//	}
+		//}
 		private void RebuildView()
 		{
+			var preSelected = false;
+
 			_mainControl.RemoveAllViews();
 			for (var i = 0; i < Element.Children.Count; i++)
 			{
 				var o = Element.Children[i];
 				var v = (SegmentedViewButton)_layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
 				v.Text = o.Text;
+
+				if (v.Text == Element.SelectedValue)
+				{
+					_mainControl.Check(i + 1);
+					preSelected = true;
+				}
+
 				if (i == 0)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_first_background);
 				else if (i == Element.Children.Count - 1)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
+				v.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
+				v.Id = i + 1;
 				_mainControl.AddView(v);
+			}
+
+			//Check the first Item if nothing was checke previously
+			if (!preSelected && Element.Children.Count > 0)
+			{
+				var firstRadio = _mainControl.GetChildAt(0);
+				if (firstRadio != null)
+				{
+					_mainControl.Check(firstRadio.Id);
+				}
 			}
 		}
 
