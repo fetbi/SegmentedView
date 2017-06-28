@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Xamarin.Plugins.SegmentedView
@@ -17,6 +18,46 @@ namespace Xamarin.Plugins.SegmentedView
 			set { SetValue(ChildrenProperty, value); }
 		}
 
+		public static readonly BindableProperty SelectedValueProperty = BindableProperty.Create("SelectedValue", typeof(string), typeof(SegmentedView), null);
+
+		public string SelectedValue
+		{
+			get { return (string)GetValue(SelectedValueProperty); }
+			set
+			{
+				if (Children?.Any() ?? false)
+				{
+					SetValue(SelectedValueProperty, value);
+					ValueChanged(this, new SelectedItemChangedEventArgs(Children.FirstOrDefault(x => x.Text == value)));
+				}
+			}
+		}
+
+		public static readonly BindableProperty SelectedIndexProperty = BindableProperty.Create("SelectedIndex", typeof(int?), typeof(SegmentedView), null);
+
+		public int? SelectedIndex
+		{
+			get { return (int?)GetValue(SelectedIndexProperty); }
+			set
+			{
+				if ((Children?.Any() ?? false))
+				{
+					SetValue(SelectedIndexProperty, value);
+
+					if (value.HasValue)
+					{
+						SetValue(SelectedValueProperty, Children[value.Value].Text);
+						ValueChanged(this, new SelectedItemChangedEventArgs(Children[value.Value]));
+					}
+					else
+					{
+						SetValue(SelectedValueProperty, null);
+						ValueChanged(this, new SelectedItemChangedEventArgs(null));
+					}
+				}
+			}
+		}
+
 
 		public SegmentedView()
 		{
@@ -25,20 +66,8 @@ namespace Xamarin.Plugins.SegmentedView
 
 		public event ValueChangedEventHandler ValueChanged;
 
-		public delegate void ValueChangedEventHandler(object sender, EventArgs e);
+		public delegate void ValueChangedEventHandler(object sender, SelectedItemChangedEventArgs e);
 
-		private string selectedValue;
-
-		public string SelectedValue
-		{
-			get { return selectedValue; }
-			set
-			{
-				selectedValue = value;
-				if (ValueChanged != null)
-					ValueChanged(this, EventArgs.Empty);
-			}
-		}
 	}
 
 	public class SegmentedViewOption : View

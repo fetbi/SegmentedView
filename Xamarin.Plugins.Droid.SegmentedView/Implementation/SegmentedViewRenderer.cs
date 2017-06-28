@@ -70,14 +70,14 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 				}
 			};
 
-			if (e.NewElement.Children.Count > 0)
-			{
-				var firstRadio =_mainControl.GetChildAt(0);
-				if(firstRadio != null)
-				{
-					_mainControl.Check(firstRadio.Id);
-				}
-			}
+			//if (e.NewElement.Children.Count > 0)
+			//{
+			//	var firstRadio =_mainControl.GetChildAt(0);
+			//	if(firstRadio != null)
+			//	{
+			//		_mainControl.Check(firstRadio.Id);
+			//	}
+			//}
 
 
 			SetNativeControl(_mainControl);
@@ -100,13 +100,35 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 					((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
 			}
 		}
-		//protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-		//{
-		//	base.OnElementPropertyChanged(sender, e);
-		//	if (e.PropertyName == Xamarin.Plugins.SegmentedView.SegmentedView.SelectedValue)
-		//	{
-		//	}
-		//}
+		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			base.OnElementPropertyChanged(sender, e);
+			if (e.PropertyName == Xamarin.Plugins.SegmentedView.SegmentedView.SelectedValueProperty.PropertyName)
+			{
+				UpdateSelectedItem();
+			}
+			else if (e.PropertyName == Xamarin.Plugins.SegmentedView.SegmentedView.SelectedIndexProperty.PropertyName)
+			{
+				UpdateSelectedItem();
+			}
+		}
+
+		private void UpdateSelectedItem()
+		{
+			for(var i = 0; i < Element.Children.Count; i++)
+			{
+				var item = _mainControl.GetChildAt(i);
+				if(item != null && item is SegmentedViewButton)
+				{
+					var button = item as SegmentedViewButton;
+					if (button.Text == Element.SelectedValue)
+						button.Checked = true;
+					else
+						button.Checked = false;
+				}
+			}
+		}
+
 		private void RebuildView()
 		{
 			var preSelected = false;
@@ -130,6 +152,8 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
 				v.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
 				v.Id = i + 1;
+				v.SetPadding(10, 0, 10, 0);
+				
 				_mainControl.AddView(v);
 			}
 
@@ -144,7 +168,7 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 			}
 		}
 
-		async void ItemsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		private void ItemsSource_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			switch(e.Action)
 			{
