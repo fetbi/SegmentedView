@@ -9,12 +9,12 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using Xamarin.Plugins.Droid.SegmentedView.Implementation;
 using Xamarin.Plugins.SegmentedView;
+using Xamarin.Plugins.SegmentedView.Droid.Implementation;
 
 [assembly: ExportRenderer(typeof(SegmentedView), typeof(SegmentedViewRenderer))]
 
-namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
+namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 {
 	public class SegmentedViewRenderer : ViewRenderer<Xamarin.Plugins.SegmentedView.SegmentedView, RadioGroup>
 	{
@@ -99,6 +99,7 @@ namespace Xamarin.Plugins.Droid.SegmentedView.Implementation
 				if (e.NewElement.Children != null && e.NewElement.Children is ObservableCollection< SegmentedViewOption>)
 					((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
 			}
+			UpdateSelectedItem();
 		}
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{

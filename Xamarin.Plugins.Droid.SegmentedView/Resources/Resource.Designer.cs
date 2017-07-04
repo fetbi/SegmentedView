@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Xamarin.Plugins.Droid.SegmentedView.Resource", IsApplication=false)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("Xamarin.Plugins.SegmentedView.Droid.Resource", IsApplication=false)]
 
-namespace Xamarin.Plugins.Droid.SegmentedView
+namespace Xamarin.Plugins.SegmentedView.Droid
 {
 	
 	

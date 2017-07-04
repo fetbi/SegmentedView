@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0451BAEF-DF2E-4B98-8644-94EE9415E389}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Xamarin.Plugins.SegmentedView.Nuget</RootNamespace>
+    <AssemblyName>Xamarin.Plugins.SegmentedView.Nuget</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NuGetPackage.ps1" />
+    <None Include="NuGetSetup.ps1" />
+    <None Include="NuGet.exe" />
+    <None Include="NuGet.config" />
+    <None Include="Package.nuspec" />
+    <None Include="tools\init.ps1" />
+    <None Include="tools\install.ps1" />
+    <None Include="tools\uninstall.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="content\" />
+    <Folder Include="src\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\Xamarin.Plugins.SegmentedView.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Xamarin.Plugins.SegmentedView.Droid.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Xamarin.Plugins.SegmentedView.iOS.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Xamarin.Plugins.Droid.SegmentedView\Xamarin.Plugins.SegmentedView.Droid.csproj">
+      <Project>{175ad22a-b16e-4dc6-b724-1c35bd1d8f68}</Project>
+      <Name>Xamarin.Plugins.SegmentedView.Droid</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.Plugins.iOS.SegmentedView\Xamarin.Plugins.SegmentedView.iOS.csproj">
+      <Project>{e5862d62-8e62-4bad-b2b2-78b73ce33889}</Project>
+      <Name>Xamarin.Plugins.SegmentedView.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xamarin.Plugins.SegmentedView\Xamarin.Plugins.SegmentedView.csproj">
+      <Project>{67f9d3a8-f71e-4428-913f-c37ae82cdb24}</Project>
+      <Name>Xamarin.Plugins.SegmentedView</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>-->
+  <Target Name="AfterBuild">
+    <Delete Files=".\NuGet.log" />
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " ContinueOnError="True" Command="PowerShell.exe -NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Unrestricted -Command &quot;&amp; {.\NuGetPackage.ps1} &quot;" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+    </Exec>
+    <Exec WorkingDirectory="$(MSBuildProjectDirectory)" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " ContinueOnError="True" Command="PowerShell.exe -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command &quot;&amp; {.\NuGetPackage.ps1 -Publish} &quot;" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+    </Exec>
+    <Message Text=" " Importance="High" />
+    <Message Text="Build Exit Code: $(ExitCode)" Importance="High" />
+    <Error Text="Encountered error(s) when creating package.%0aCheck the NuGet.log file for details." Condition=" '$(ExitCode)' == '1' " File="NuGet.log" />
+    <Error Text="Created package but encountered error(s) when trying to publish it.%0aCheck the NuGet.log file for details." Condition=" '$(Configuration)|$(Platform)|$(ExitCode)' == 'Release|AnyCPU|2' " File="NuGet.log" />
+    <Message Text="SUCCESS: Created package." Condition=" '$(Configuration)|$(Platform)|$(ExitCode)' == 'Debug|AnyCPU|0' " Importance="High" />
+    <Message Text="SUCCESS: Published package." Condition=" '$(Configuration)|$(Platform)|$(ExitCode)' == 'Release|AnyCPU|0' " Importance="High" />
+  </Target>
+</Project>
