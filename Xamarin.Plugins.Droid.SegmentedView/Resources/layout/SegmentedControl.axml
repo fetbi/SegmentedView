@@ -1,3 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Xamarin.Plugins.Droid.SegmentedView.Implementation.SegmentedViewButton
+<Xamarin.Plugins.SegmentedView.Droid.Implementation.SegmentedViewButton
     style="@style/SegmentedViewOption" />
