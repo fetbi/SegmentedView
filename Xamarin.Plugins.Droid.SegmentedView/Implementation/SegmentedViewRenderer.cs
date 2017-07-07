@@ -36,7 +36,6 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 			_mainControl = new RadioGroup(Context) {Orientation = Orientation.Horizontal};
 			_mainControl.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
 			_mainControl.LayoutParameters = radiogroupparams;
-			_mainControl.SetBackgroundColor(global::Android.Graphics.Color.Red);
 
 			for (var i = 0; i < e.NewElement.Children.Count; i++)
 			{
@@ -148,6 +147,7 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
 				v.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
 				v.Id = i + 1;
+
 				v.SetPadding(10, 0, 10, 0);
 				
 				_mainControl.AddView(v);
