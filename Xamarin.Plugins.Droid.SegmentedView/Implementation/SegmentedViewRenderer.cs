@@ -30,16 +30,18 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 			base.OnElementChanged(e);
 
 			_layoutInflater = (LayoutInflater)Context.GetSystemService(Context.LayoutInflaterService);
+			var radiogroupparams =
+				new LinearLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.WrapContent) {Weight = 1};
 
-			_mainControl = new RadioGroup(Context);
-			//_mainControl.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
-			_mainControl.Orientation = Orientation.Horizontal;
+			_mainControl = new RadioGroup(Context) {Orientation = Orientation.Horizontal};
 			_mainControl.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.CenterVertical);
+			_mainControl.LayoutParameters = radiogroupparams;
+			_mainControl.SetBackgroundColor(global::Android.Graphics.Color.Red);
 
 			for (var i = 0; i < e.NewElement.Children.Count; i++)
 			{
 				var o = e.NewElement.Children[i];
-				var v = (SegmentedViewButton)_layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
+				var v = (SegmentedViewButton) _layoutInflater.Inflate(Resource.Layout.SegmentedControl, null);
 				v.Text = o.Text;
 				if (i == 0)
 				{
@@ -48,6 +50,7 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 				else if (i == e.NewElement.Children.Count - 1)
 					v.SetBackgroundResource(Resource.Drawable.segmented_control_last_background);
 
+				v.SetPadding(10, 0, 10, 0);
 				v.Gravity = GravityFlags.CenterHorizontal | GravityFlags.CenterVertical;
 				_mainControl.AddView(v);
 			}
@@ -86,19 +89,14 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 			{
 				// Unsubscribe from event handlers and cleanup any resources
 
-				if (Element != null)
-				{
-					if (Element.Children != null && Element.Children is INotifyCollectionChanged)
-						((INotifyCollectionChanged)Element.Children).CollectionChanged -= ItemsSource_CollectionChanged;
-				}
+				if (Element?.Children != null && Element.Children is INotifyCollectionChanged)
+					((INotifyCollectionChanged)Element.Children).CollectionChanged -= ItemsSource_CollectionChanged;
 			}
 
-			if (e.NewElement != null)
-			{
-				// Configure the control and subscribe to event handlers
-				if (e.NewElement.Children != null && e.NewElement.Children is ObservableCollection< SegmentedViewOption>)
-					((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
-			}
+			// Configure the control and subscribe to event handlers
+			if (e.NewElement?.Children != null && e.NewElement.Children is ObservableCollection< SegmentedViewOption>)
+				((ObservableCollection<SegmentedViewOption>)e.NewElement.Children).CollectionChanged += ItemsSource_CollectionChanged;
+
 			UpdateSelectedItem();
 		}
 		protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -119,13 +117,10 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 			for(var i = 0; i < Element.Children.Count; i++)
 			{
 				var item = _mainControl.GetChildAt(i);
-				if(item != null && item is SegmentedViewButton)
+				if(item is SegmentedViewButton)
 				{
 					var button = item as SegmentedViewButton;
-					if (button.Text == Element.SelectedValue)
-						button.Checked = true;
-					else
-						button.Checked = false;
+					button.Checked = button.Text == Element.SelectedValue;
 				}
 			}
 		}
@@ -218,8 +213,7 @@ namespace Xamarin.Plugins.SegmentedView.Droid.Implementation
 			var a = this.Context.ObtainStyledAttributes(attributes, Resource.Styleable.SegmentedViewOption, defStyle, Resource.Style.SegmentedViewOption);
 
 			var lineColor = a.GetColor(Resource.Styleable.SegmentedViewOption_lineColor, 0);
-			linePaint = new Paint();
-			linePaint.Color = lineColor;
+			linePaint = new Paint {Color = lineColor};
 
 			lineHeightUnselected = a.GetDimensionPixelSize(Resource.Styleable.SegmentedViewOption_lineHeightUnselected, 0);
 			lineHeightSelected = a.GetDimensionPixelSize(Resource.Styleable.SegmentedViewOption_lineHeightSelected, 0);

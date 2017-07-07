@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Xamarin.Plugins.Droid.SegmentedView.Implementation;
+using Xamarin.Plugins.SegmentedView.Droid.Implementation;
 
 namespace SegmentedView.Demo.Droid
 {

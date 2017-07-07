@@ -733,6 +733,7 @@ namespace SegmentedView.Demo.Droid
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.progress_circular = global::SegmentedView.Demo.Droid.Resource.Id.progress_circular;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.progress_horizontal = global::SegmentedView.Demo.Droid.Resource.Id.progress_horizontal;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.radio = global::SegmentedView.Demo.Droid.Resource.Id.radio;
+			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.radioGroup1 = global::SegmentedView.Demo.Droid.Resource.Id.radioGroup1;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.right = global::SegmentedView.Demo.Droid.Resource.Id.right;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.screen = global::SegmentedView.Demo.Droid.Resource.Id.screen;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Id.scroll = global::SegmentedView.Demo.Droid.Resource.Id.scroll;
@@ -848,6 +849,7 @@ namespace SegmentedView.Demo.Droid
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Layout.select_dialog_multichoice_material = global::SegmentedView.Demo.Droid.Resource.Layout.select_dialog_multichoice_material;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Layout.select_dialog_singlechoice_material = global::SegmentedView.Demo.Droid.Resource.Layout.select_dialog_singlechoice_material;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Layout.support_simple_spinner_dropdown_item = global::SegmentedView.Demo.Droid.Resource.Layout.support_simple_spinner_dropdown_item;
+			global::Xamarin.Plugins.SegmentedView.Droid.Resource.Layout.test = global::SegmentedView.Demo.Droid.Resource.Layout.test;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.String.abc_action_bar_home_description = global::SegmentedView.Demo.Droid.Resource.String.abc_action_bar_home_description;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.String.abc_action_bar_home_description_format = global::SegmentedView.Demo.Droid.Resource.String.abc_action_bar_home_description_format;
 			global::Xamarin.Plugins.SegmentedView.Droid.Resource.String.abc_action_bar_home_subtitle_description_format = global::SegmentedView.Demo.Droid.Resource.String.abc_action_bar_home_subtitle_description_format;
@@ -4224,6 +4226,9 @@ namespace SegmentedView.Demo.Droid
 			// aapt resource value: 0x7f070054
 			public const int radio = 2131165268;
 			
+			// aapt resource value: 0x7f070099
+			public const int radioGroup1 = 2131165337;
+			
 			// aapt resource value: 0x7f070030
 			public const int right = 2131165232;
 			
@@ -4347,8 +4352,8 @@ namespace SegmentedView.Demo.Droid
 			// aapt resource value: 0x7f070048
 			public const int title_template = 2131165256;
 			
-			// aapt resource value: 0x7f070099
-			public const int toolbar = 2131165337;
+			// aapt resource value: 0x7f07009a
+			public const int toolbar = 2131165338;
 			
 			// aapt resource value: 0x7f070032
 			public const int top = 2131165234;
@@ -4624,7 +4629,10 @@ namespace SegmentedView.Demo.Droid
 			public const int Tabbar = 2130903096;
 			
 			// aapt resource value: 0x7f030039
-			public const int Toolbar = 2130903097;
+			public const int test = 2130903097;
+			
+			// aapt resource value: 0x7f03003a
+			public const int Toolbar = 2130903098;
 			
 			static Layout()
 			{

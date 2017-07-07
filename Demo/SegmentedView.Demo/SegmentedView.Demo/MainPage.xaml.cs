@@ -15,6 +15,7 @@ namespace SegmentedView.Demo
 			RosterTypePicker.Children.Add(new SegmentedViewOption { Text = "Awesome" });
 			RosterTypePicker.ValueChanged += RosterTypePicker_ValueChanged;
 
+			RosterTypePicker.SelectedIndex = 2;
 		}
 
 		private void RosterTypePicker_ValueChanged(object sender, System.EventArgs e)
